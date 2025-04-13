@@ -1157,17 +1157,21 @@ const names = [
   "Marcus Vinicius Fernandes Vieira Filho",
 ].sort();
 
+interface AttendanceRecord {
+  [name: string]: boolean;
+}
+
 export function App() {
   const [search, setSearch] = useState("");
-  const [attendance, setAttendance] = useState(() => {
+  const [attendance, setAttendance] = useState<AttendanceRecord>(() => {
     // Recupera o estado salvo do localStorage ao montar o componente
     const savedAttendance = localStorage.getItem("attendance");
     return savedAttendance ? JSON.parse(savedAttendance) : {};
   });
 
-  const handleToggle = (name) => {
+  const handleToggle = (name: string) => {
     // Alterna o estado do nome e salva imediatamente no localStorage
-    setAttendance((prev) => {
+    setAttendance((prev: AttendanceRecord) => {
       const updatedAttendance = {
         ...prev,
         [name]: !prev[name],
