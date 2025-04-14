@@ -1164,23 +1164,30 @@ interface AttendanceRecord {
 export function App() {
   const [search, setSearch] = useState("");
   const [attendance, setAttendance] = useState<AttendanceRecord>(() => {
-    // Recupera o estado salvo do localStorage ao montar o componente
+    // Ao iniciar, tenta carregar os dados salvos do localStorage
     const savedAttendance = localStorage.getItem("attendance");
     return savedAttendance ? JSON.parse(savedAttendance) : {};
   });
 
+  // Função que marca presença — mas NÃO desmarca
   const handleToggle = (name: string) => {
-    // Alterna o estado do nome e salva imediatamente no localStorage
     setAttendance((prev: AttendanceRecord) => {
+      // Se já estiver marcado como presente, não faz nada
+      if (prev[name]) return prev;
+
+      // Marca como presente
       const updatedAttendance = {
         ...prev,
-        [name]: !prev[name],
+        [name]: true,
       };
+
+      // Salva no localStorage para manter o estado mesmo após atualizar a página
       localStorage.setItem("attendance", JSON.stringify(updatedAttendance));
       return updatedAttendance;
     });
   };
 
+  // Lista de nomes filtrada pelo campo de busca
   const filteredNames = names.filter((name) =>
     name.toLowerCase().includes(search.toLowerCase())
   );
@@ -1188,6 +1195,8 @@ export function App() {
   return (
     <div className="p-5 font-sans">
       <h1 className="text-2xl font-bold mb-4">Lista de Presença</h1>
+
+      {/* Campo de busca */}
       <input
         type="text"
         placeholder="Buscar nome..."
@@ -1195,21 +1204,22 @@ export function App() {
         onChange={(e) => setSearch(e.target.value)}
         className="w-full p-2 mb-4 border border-gray-300 rounded bg-transparent"
       />
+
+      {/* Lista de nomes */}
       <ul className="list-none p-0">
         {filteredNames.map((name) => (
-          <li key={name} className="mb-2">
-            <label
-              className="flex items-center cursor-pointer"
-              onClick={() => handleToggle(name)}
+          <li
+            key={name}
+            onClick={() => handleToggle(name)} // Marca apenas se ainda não estiver marcado
+            className="mb-2 cursor-pointer"
+          >
+            <span
+              className={`select-none ${
+                attendance[name] ? "line-through text-gray-400" : ""
+              }`}
             >
-              <span
-                style={{
-                  textDecoration: attendance[name] ? "line-through" : "none",
-                }}
-              >
-                {name}
-              </span>
-            </label>
+              {name}
+            </span>
           </li>
         ))}
       </ul>
