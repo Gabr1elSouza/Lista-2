@@ -1,7 +1,4 @@
-import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { Resumo } from "./Resumo";
-import splashScreen from "./assets/fundo.jpg";
+import React from "react";
 
 const names = [
   "ALBERTO MARIO GRISELLI",
@@ -1160,91 +1157,31 @@ const names = [
   "Marcus Vinicius Fernandes Vieira Filho",
 ].sort();
 
-interface AttendanceRecord {
-  [name: string]: boolean;
-}
+// src/Resumo.tsx
+export function Resumo() {
+  const savedAttendance = localStorage.getItem("attendance");
+  const attendance: AttendanceRecord = savedAttendance ? JSON.parse(savedAttendance) : {};
 
-export function App() {
-  const [search, setSearch] = useState("");
-  const [attendance, setAttendance] = useState<AttendanceRecord>(() => {
-    // Ao iniciar, tenta carregar os dados salvos do localStorage
-    const savedAttendance = localStorage.getItem("attendance");
-    return savedAttendance ? JSON.parse(savedAttendance) : {};
-  });
-
-  // Função que marca presença — mas NÃO desmarca
-  const handleToggle = (name: string) => {
-    setAttendance((prev: AttendanceRecord) => {
-      // Se já estiver marcado como presente, não faz nada
-      if (prev[name]) return prev;
-
-      // Marca como presente
-      const updatedAttendance = {
-        ...prev,
-        [name]: true,
-      };
-
-      // Salva no localStorage para manter o estado mesmo após atualizar a página
-      localStorage.setItem("attendance", JSON.stringify(updatedAttendance));
-      return updatedAttendance;
-    });
-  };
-
-  // Lista de nomes filtrada pelo campo de busca
-  const filteredNames = names.filter((name) =>
-    name.toLowerCase().includes(search.toLowerCase())
-  );
+  const marcados = names.filter((name) => attendance[name]);
+  const naoMarcados = names.filter((name) => !attendance[name]);
 
   return (
-    <Router>
-      <div className="p-5 font-sans">
-        <nav className="mb-4 space-x-4">
-          <Link to="/" className="underline">Lista</Link>
-          <Link to="/resumo" className="underline">Resumo</Link>
-        </nav>
+    <div className="p-5 font-sans">
+      <h1 className="text-2xl font-bold mb-4">Resumo de Presença</h1>
 
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <h1 className="text-2xl font-bold mb-4">Lista de Presença</h1>
+      <h2 className="text-xl font-semibold mt-4">Presentes ({marcados.length})</h2>
+      <ul className="list-disc pl-5 mb-6">
+        {marcados.map((name) => (
+          <li key={name}>{name}</li>
+        ))}
+      </ul>
 
-                <input
-                  type="text"
-                  placeholder="Buscar nome..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="w-full p-2 mb-4 border border-gray-300 rounded bg-transparent"
-                />
-
-                <p className="mb-4">
-                  Marcados: {Object.keys(attendance).length} / {names.length}
-                </p>
-
-                <ul className="list-none p-0">
-                  {filteredNames.map((name) => (
-                    <li
-                      key={name}
-                      onClick={() => handleToggle(name)}
-                      className="mb-2 cursor-pointer"
-                    >
-                      <span
-                        className={`select-none ${
-                          attendance[name] ? "line-through text-gray-400" : ""
-                        }`}
-                      >
-                        {name}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            }
-          />
-          <Route path="/resumo" element={<Resumo />} />
-        </Routes>
-      </div>
-    </Router>
+      <h2 className="text-xl font-semibold mt-4">Faltantes ({naoMarcados.length})</h2>
+      <ul className="list-disc pl-5">
+        {naoMarcados.map((name) => (
+          <li key={name}>{name}</li>
+        ))}
+      </ul>
+    </div>
   );
 }
