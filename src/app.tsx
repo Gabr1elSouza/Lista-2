@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { Resumo } from "./Resumo";
-import splashScreen from "./assets/fundo.jpg";
 
 const names = [
   "ALBERTO MARIO GRISELLI",

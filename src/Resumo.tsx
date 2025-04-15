@@ -1,4 +1,4 @@
-import React from "react";
+
 
 const names = [
   "ALBERTO MARIO GRISELLI",
@@ -1160,7 +1160,7 @@ const names = [
 // src/Resumo.tsx
 export function Resumo() {
   const savedAttendance = localStorage.getItem("attendance");
-  const attendance: AttendanceRecord = savedAttendance ? JSON.parse(savedAttendance) : {};
+  const attendance = savedAttendance ? JSON.parse(savedAttendance) : {};
 
   const marcados = names.filter((name) => attendance[name]);
   const naoMarcados = names.filter((name) => !attendance[name]);
