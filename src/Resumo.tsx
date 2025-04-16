@@ -1,5 +1,3 @@
-
-
 const names = [
   "ALBERTO MARIO GRISELLI",
   "AUANA MATTAR LIMA",
@@ -1169,19 +1167,23 @@ export function Resumo() {
     <div className="p-5 font-sans">
       <h1 className="text-2xl font-bold mb-4">Resumo de Presença</h1>
 
-      <h2 className="text-xl font-semibold mt-4">Presentes ({marcados.length})</h2>
-      <ul className="list-disc pl-5 mb-6">
+      <h2 className="text-xl font-semibold mt-4">
+        Presentes ({marcados.length})
+      </h2>
+      <div className=" pl-5 mb-6">
         {marcados.map((name) => (
-          <li key={name}>{name}</li>
+          <p key={name}>{name}</p>
         ))}
-      </ul>
+      </div>
 
-      <h2 className="text-xl font-semibold mt-4">Faltantes ({naoMarcados.length})</h2>
-      <ul className="list-disc pl-5">
+      <h2 className="text-xl font-semibold mt-4">
+        Faltantes ({naoMarcados.length})
+      </h2>
+      <div className="list-disc pl-5">
         {naoMarcados.map((name) => (
-          <li key={name}>{name}</li>
+          <p key={name}>{name}</p>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
