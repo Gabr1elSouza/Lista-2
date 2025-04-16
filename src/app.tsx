@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { Link, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { Resumo } from "./Resumo";
 
 const names = [
@@ -1198,8 +1198,12 @@ export function App() {
     <Router>
       <div className="p-5 font-sans">
         <nav className="mb-4 space-x-4">
-          <Link to="/" className="underline">Lista</Link>
-          <Link to="/resumo" className="underline">Resumo</Link>
+          <Link to="/" className="underline">
+            Lista
+          </Link>
+          <Link to="/resumo" className="underline">
+            Resumo
+          </Link>
         </nav>
 
         <Routes>
@@ -1241,7 +1245,10 @@ export function App() {
               </>
             }
           />
-          <Route path="/resumo" element={<Resumo />} />
+          <Route
+            path="/resumo"
+            element={<Resumo attendance={attendance} names={names} />}
+          />
         </Routes>
       </div>
     </Router>
